@@ -29,7 +29,7 @@ formEl.addEventListener('submit', async (e) => {
                 listEl.innerHTML = '';
                 throw new Error('Error! Nothing to load');
             } else {
-                createElements(data)
+                createElements(dataImg)
             }
         } catch(error) {
         iziToast.show({
