@@ -22,20 +22,21 @@ formEl.addEventListener('submit', async (e) => {
         });
         return;
     } else {
-        const dataImg = searchImg(value)
-            const data = await if (dataImg.hits.length === 0) {
-                    hideLoader();
-                    listEl.innerHTML = '';
-            throw new Error('Error! Nothing to load');
-        } else {
-                    createElements(data)
-        }
-            catch(error => {
+        const dataImg = await searchImg(value)
+        try {
+              if (dataImg.hits.length === 0) {
+                hideLoader();
+                listEl.innerHTML = '';
+                throw new Error('Error! Nothing to load');
+            } else {
+                createElements(data)
+            }
+        } catch(error) {
         iziToast.show({
             title: 'Sorry',
             message: 'there are no images matching your search query. Please try again!',
             color: 'red',
         })
-    }); 
+    }; 
     }
 });
