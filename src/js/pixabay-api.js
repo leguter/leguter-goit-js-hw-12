@@ -17,4 +17,3 @@ export async function searchImg(value) {
     console.log(err);
   }
 };
-searchImg('dog')

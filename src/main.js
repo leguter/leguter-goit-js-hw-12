@@ -11,7 +11,7 @@ function showLoader() {
 export function hideLoader() {
   loaderEl.classList.add('visually-hidden')
 }
-formEl.addEventListener('submit', (e) => {
+formEl.addEventListener('submit', async (e) => {
     e.preventDefault();
     const value = formEl.elements[0].value.trim();
     showLoader()
@@ -22,16 +22,15 @@ formEl.addEventListener('submit', (e) => {
         });
         return;
     } else {
-        searchImg(value)
-            .then(data => {
-                if (data.hits.length === 0) {
+        const dataImg = searchImg(value)
+            const data = await if (dataImg.hits.length === 0) {
                     hideLoader();
                     listEl.innerHTML = '';
             throw new Error('Error! Nothing to load');
         } else {
                     createElements(data)
         }
-            }).catch(error => {
+            catch(error => {
         iziToast.show({
             title: 'Sorry',
             message: 'there are no images matching your search query. Please try again!',
