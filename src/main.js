@@ -25,12 +25,12 @@ formEl.addEventListener('submit', async (e) => {
     } else {
         page++;
         const dataImg = await searchImg(value, page)
-        if (Event.target.value !== value) {
-            page = 1;
+        // if (Event.target.value !== value) {
+        //     page = 1;
             
-        } else {
-            page++
-        }
+        // } else {
+        //     page++
+        // }
         try {
               if (dataImg.hits.length === 0) {
                 hideLoader();
