@@ -11,6 +11,7 @@ function showLoader() {
 export function hideLoader() {
   loaderEl.classList.add('visually-hidden')
 }
+let page = 1;
 formEl.addEventListener('submit', async (e) => {
     e.preventDefault();
     const value = formEl.elements[0].value.trim();
@@ -22,7 +23,14 @@ formEl.addEventListener('submit', async (e) => {
         });
         return;
     } else {
-        const dataImg = await searchImg(value)
+        page++;
+        const dataImg = await searchImg(value, page)
+        if (Event.target.value !== value) {
+            page = 1;
+            
+        } else {
+            page++
+        }
         try {
               if (dataImg.hits.length === 0) {
                 hideLoader();
