@@ -14,12 +14,7 @@ export async function searchImg(value, page) {
 
   try {
     const response = await axios.get('/api/', { params });
-    //  return response.data;
-     if (!response.ok) {
-         throw new Error(response.status);
-         } else {
-            return response.data;
-     }
+      return response.data;
   } catch (err) {
     console.log(err);
   }
