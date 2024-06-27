@@ -1,20 +1,26 @@
 import iziToast from "izitoast";
 import "izitoast/dist/css/iziToast.min.css";
- import { createElements } from "./js/render-functions.js";
+ import { createElements, createElementsMore } from "./js/render-functions.js";
 import { searchImg } from './js/pixabay-api.js';
 const formEl = document.querySelector('.form-el');
 const listEl = document.querySelector('.img-list')
 const loaderEl = document.querySelector('.loader')
+const btnLoad = document.querySelector('.btn-load')
 function showLoader() {
   loaderEl.classList.remove('visually-hidden')
 }
 export function hideLoader() {
   loaderEl.classList.add('visually-hidden')
 }
+
 let page = 1;
+let value;
+let maxPage = 1;
+const perPage = 15;
 formEl.addEventListener('submit', async (e) => {
     e.preventDefault();
-    const value = formEl.elements[0].value.trim();
+    page = 1;
+    value = formEl.elements[0].value.trim();
     showLoader()
     if (!value) {
         hideLoader();
@@ -23,8 +29,9 @@ formEl.addEventListener('submit', async (e) => {
         });
         return;
     } else {
-        page++;
+        btnLoad.classList.add('visually-hidden');
         const dataImg = await searchImg(value, page)
+        maxPage = Math.ceil(dataImg.totalHits / perPage);
         // if (Event.target.value !== value) {
         //     page = 1;
             
@@ -37,7 +44,8 @@ formEl.addEventListener('submit', async (e) => {
                 listEl.innerHTML = '';
                 throw new Error('Error! Nothing to load');
             } else {
-                createElements(dataImg)
+                  createElements(dataImg)
+                  endColection();
             }
         } catch(error) {
         iziToast.show({
@@ -48,3 +56,36 @@ formEl.addEventListener('submit', async (e) => {
     }; 
     }
 });
+btnLoad.addEventListener('click', async () => {
+    btnLoad.classList.add('visually-hidden');
+    page++;
+    showLoader()
+    try {
+          const dataImg = await searchImg(value, page)
+        createElementsMore(dataImg)
+        scrollEl()
+    } catch (err) {
+        console.log(err)
+    }
+  
+
+})
+ export function endColection() {
+    if (page >= maxPage) {
+     iziToast.show({
+            message: 'Were sorry, but you have reached the end of search results',
+     });
+         btnLoad.classList.add('visually-hidden');
+    } else {
+        btnLoad.classList.remove('visually-hidden');
+ }
+}
+function scrollEl() {
+    const liEl = listEl.children[0]
+    const height = liEl.getBoundingClientRect().height
+
+    window.scrollBy({
+        top: height * 2,
+        behavior:'smooth',
+    })
+}
